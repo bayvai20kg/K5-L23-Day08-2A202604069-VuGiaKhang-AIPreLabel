@@ -1,4 +1,4 @@
-# Báo cáo Day 08 — <<MSHV - Họ và tên>>
+# Báo cáo Day 08 — 2A202604069 - Vu Gia Khang
 
 > Một file duy nhất cho cả bài (đã gộp recipe, QC và ghi chú cá nhân). Mọi con số kèm **mẫu số** và nguồn (file nào). Viết bằng lời của bạn.
 
@@ -59,26 +59,28 @@
 
 ## 6. Calibration (Part 6)
 
-- Số quyết định: <<>> (`calibration_decisions.csv`); quan trọng nhất (dẫn `CAL-xx`): <<>>
-- Quy tắc mới đã vào `guideline_v1.1_calibrated.md`: <<>>
-- Nguyên nhân gốc: <<guideline mơ hồ / chưa nắm quy tắc / máy>>
+- Số quyết định: 4 quyết định (`submission/qc/calibration_decisions.csv`); quan trọng nhất (dẫn `CAL-01`): Chốt quy tắc phân định xe ba bánh có mui (`three_wheeler`) và bắt buộc tách riêng đối tượng người điều khiển (`person`), giải quyết triệt để lỗi lan truyền khi YOLO26 nhận nhầm thành ô tô.
+- Quy tắc mới đã vào `guideline_v1.1_calibrated.md`: Bổ sung tiêu chí phân loại xe điện theo bàn đạp (`CAL-02`); quy định ngưỡng gom cụm $\ge 5$ xe máy đỗ chen chúc che khuất $>80\%$ vào `ignore_region` (`CAL-03`); siết quy trình quét 4 góc phần tư đối với ảnh đông đúc (`CAL-04`).
+- Nguyên nhân gốc: Phần lớn xuất phát từ **guideline v1.0 còn chỗ mơ hồ** (chưa quy định cụ thể về xe điện, cụm xe máy đỗ gần) kết hợp với **lỗi cố hữu của detector** (closed-set mù lớp đặc thù địa phương).
 
 ## 7. QC và quyết định (Part 6)
 
-- Mẫu: <<n>> ảnh (<<m>> ảnh `can_review` + <<k>> ngẫu nhiên, seed 42); người kiểm: bạn (**hạn chế**: bạn vừa là người duyệt).
-- Lỗi theo **đối tượng**: <<.../... = ...%>> · theo **ảnh**: <<.../... = ...%>> (ngưỡng Release ≤ 2%)
-- Top lỗi (trong: bỏ sót, thừa, sai lớp, sai vị trí/kích thước, sai thuộc tính, sai mask) + một ảnh ví dụ mỗi loại: <<>>
-- **Giới hạn mẫu nhỏ** (cận trên 95% trong `qc_report_auto.md`): <<>>
-- Script kiểm được / không kiểm được (ví dụ ôm sát, cùng bỏ sót với máy, theo checklist thật): <<>>
+- Mẫu: 7 ảnh (2 ảnh có ca khó/`can_review` + 5 ảnh ngẫu nhiên, seed 42); người kiểm: bạn (**hạn chế**: tự kiểm tra lại nhãn của chính mình nên có thể tồn tại điểm mù nhận thức chủ quan).
+- Lỗi theo **đối tượng**: 0/124 đối tượng = 0.0% · theo **ảnh**: 0/7 ảnh = 0.0% (đạt ngưỡng Release $\le 2\%$).
+- Top lỗi (trong: bỏ sót, thừa, sai lớp, sai vị trí/kích thước, sai thuộc tính, sai mask) + một ảnh ví dụ mỗi loại: Trong mẫu kiểm định 7 ảnh không ghi nhận lỗi hệ thống nào; các trường hợp sai lệch nhỏ trước đó ở Part 4 (`img_005` box ma, `img_028` box lỏng) đều đã được khắc phục hoàn toàn trong đợt review hiệu chỉnh.
+- **Giới hạn mẫu nhỏ** (cận trên 95% trong `qc_report_auto.md`): Với 0 ảnh lỗi trên mẫu 7 ảnh, cận trên khoảng tin cậy 95% Wilson của tỉ lệ ảnh lỗi thật trong tổng thể có thể lên tới **35%**. Do đó, về mặt thống kê toán học, cỡ mẫu 7 ảnh chưa đủ mạnh để khẳng định chắc chắn 100% rằng toàn bộ dataset đạt sai số dưới 2%, đây là giới hạn thực tế cần nêu rõ.
+- Script kiểm được / không kiểm được: Script kiểm tra tự động được định dạng COCO, kích thước bounding box hợp lệ ($>20\text{px}$), sự có mặt của polygon mask. Script **không** tự đánh giá được liệu bounding box có ôm khít vật thể thực tế trong ảnh hay không và không phát hiện được nếu cả người lẫn máy cùng bỏ sót một vật thể ngoài thực địa.
 
-**Quyết định: <<Release / Hold / Rework>>**, ngày <<YYYY-MM-DD>>. Lý do (đi theo Hold → Rework → Release): <<>>
-Nếu Rework / Hold, việc cần làm tiếp: <<>>
+**Quyết định: Release**, ngày 2026-11-18. Lý do (đi theo Hold → Rework → Release):
+1. Không có vướng mắc guideline chưa chốt và không có ảnh hỏng $\rightarrow$ Không cần **Hold**.
+2. Tỉ lệ ảnh lỗi trong mẫu QC là 0.0% ($\le 2\%$), không có lỗi hệ thống lặp lại, tỉ lệ bắt bẫy đạt 91.7% ($\ge 80\%$) $\rightarrow$ Không cần **Rework**.
+3. Toàn bộ 24 ảnh batch đã được review hoàn chỉnh, đáp ứng đầy đủ tiêu chuẩn nghiệm thu $\rightarrow$ Đạt điều kiện **Release**.
 
 ## 8. Ghi chú cá nhân
 
-- **Dùng AI để làm bài** (công cụ nào, việc gì, kiểm tra thế nào; "không dùng" nếu không): <<>>
-- Gold có bị nhiễm không (bạn có nhìn pre-label hay hỏi AI trước khi gán xong)? <<không / có, như sau: ...>>
-- Máy / GPU / CVAT dùng; vướng mắc cài đặt: <<>>
-- Dùng cache `data/cache/` thay vì tự chạy? <<không / có, vì ...>>
-- Lỗi / bug script đã gặp (nếu có): <<>>
-- Một điều bạn làm khác lần sau: <<>>
+- **Dùng AI để làm bài** (công cụ nào, việc gì, kiểm tra thế nào; "không dùng" nếu không): Dùng trợ lý Antigravity để hỗ trợ chạy các script CLI, kiểm tra cú pháp COCO JSON và kiểm tra các điều kiện nghiệm thu của bộ test `check_submission.py`. Toàn bộ dữ liệu được xác thực lại bằng các script độc lập của ban tổ chức.
+- Gold có bị nhiễm không (bạn có nhìn pre-label hay hỏi AI trước khi gán xong)? Không bị nhiễm. 4 ảnh gold được gán tay thủ công từ Part 1 hoàn toàn độc lập trước khi chạy bất kỳ mô hình pre-label nào.
+- Máy / GPU / CVAT dùng; vướng mắc cài đặt: Windows 11, GPU NVIDIA GeForce GTX 1650 Ti with Max-Q Design (4GB VRAM), Python 3.11, CVAT chạy trên Docker Desktop v2.81.0. Ban đầu gặp khó khăn do PyTorch mặc định là bản CPU, sau đó đã khắc phục bằng cách chạy mô hình với các tham số tối ưu.
+- Dùng cache `data/cache/` thay vì tự chạy? Không dùng cache. Toàn bộ các lần chạy YOLO26, YOLOE, SAM và quét ngưỡng đều được thực thi thật trên máy.
+- Lỗi / bug script đã gặp (nếu có): Quá trình cài đặt ban đầu gặp hiện tượng file lock trên Windows khi mở đồng thời CSV trong trình đọc bảng tính; đã khắc phục bằng cách đóng ứng dụng trước khi ghi đè file.
+- Một điều bạn làm khác lần sau: Sẽ luôn chia ảnh thành 4 góc phần tư để quét thủ công trước khi hiển thị nhãn máy ngay từ những ảnh đầu tiên để không bỏ sót các vật thể nhỏ ở cự ly xa.
